@@ -3,14 +3,17 @@ import { TOKEN_TYPES } from '../token/token'
 
 describe('Lexer', () => {
   it('should generate the correct tokens', () => {
-    const input = '(){},;'
+    const input = '+=(){},;'
     const tests = [
+      { expectedType: TOKEN_TYPES.PLUS, expectedLiteral: '+' },
+      { expectedType: TOKEN_TYPES.ASSIGN, expectedLiteral: '=' },
       { expectedType: TOKEN_TYPES.LPAREN, expectedLiteral: '(' },
       { expectedType: TOKEN_TYPES.RPAREN, expectedLiteral: ')' },
       { expectedType: TOKEN_TYPES.LBRACE, expectedLiteral: '{' },
       { expectedType: TOKEN_TYPES.RBRACE, expectedLiteral: '}' },
       { expectedType: TOKEN_TYPES.COMMA, expectedLiteral: ',' },
-      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' }
+      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' },
+      { expectedType: TOKEN_TYPES.EOF, expectedLiteral: '' }
     ]
 
     const lexer = Lexer.newLexer(input)
