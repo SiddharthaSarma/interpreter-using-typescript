@@ -9,6 +9,14 @@ export const TOKEN_TYPES = {
   // Operators
   ASSIGN: '=',
   PLUS: '+',
+  MINUS: '-',
+  BANG: '!',
+  ASTERISK: '*',
+  SLASH: '/',
+
+  LT: '<',
+  GT: '>',
+
   // Delimiters
   COMMA: ',',
   SEMICOLON: ';',
@@ -16,14 +24,25 @@ export const TOKEN_TYPES = {
   RPAREN: ')',
   LBRACE: '{',
   RBRACE: '}',
+
   // Keywords
   FUNCTION: 'FUNCTION',
-  LET: 'LET'
+  LET: 'LET',
+  TRUE: 'TRUE',
+  FALSE: 'FALSE',
+  IF: 'IF',
+  ELSE: 'ELSE',
+  RETURN: 'RETURN'
 } as const
 
 export const KEYWORDS = {
   fn: newToken(TOKEN_TYPES.FUNCTION, 'fn'),
-  let: newToken(TOKEN_TYPES.LET, 'let')
+  let: newToken(TOKEN_TYPES.LET, 'let'),
+  true: newToken(TOKEN_TYPES.TRUE, 'true'),
+  false: newToken(TOKEN_TYPES.FALSE, 'false'),
+  if: newToken(TOKEN_TYPES.IF, 'if'),
+  else: newToken(TOKEN_TYPES.ELSE, 'else'),
+  return: newToken(TOKEN_TYPES.RETURN, 'return')
 } as const
 
 export const lookupIdent = (ident: string): TokenType => {

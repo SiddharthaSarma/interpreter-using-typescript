@@ -59,6 +59,24 @@ export class Lexer {
       case TOKEN_TYPES.PLUS:
         token = newToken(TOKEN_TYPES.PLUS, this.ch)
         break
+      case TOKEN_TYPES.MINUS:
+        token = newToken(TOKEN_TYPES.MINUS, this.ch)
+        break
+      case TOKEN_TYPES.LT:
+        token = newToken(TOKEN_TYPES.LT, this.ch)
+        break
+      case TOKEN_TYPES.GT:
+        token = newToken(TOKEN_TYPES.GT, this.ch)
+        break
+      case TOKEN_TYPES.BANG:
+        token = newToken(TOKEN_TYPES.BANG, this.ch)
+        break
+      case TOKEN_TYPES.SLASH:
+        token = newToken(TOKEN_TYPES.SLASH, this.ch)
+        break
+      case TOKEN_TYPES.ASTERISK:
+        token = newToken(TOKEN_TYPES.ASTERISK, this.ch)
+        break
       case TOKEN_TYPES.SEMICOLON:
         token = newToken(TOKEN_TYPES.SEMICOLON, this.ch)
         break

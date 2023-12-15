@@ -79,4 +79,49 @@ describe('Lexer', () => {
       expect(token.literal).toEqual(test.expectedLiteral)
     }
   })
+
+  it('should generate tokens for the gibberish code', () => {
+    const input = `
+      5 < 10 > 5;
+      if (5 < 10) {
+        return true;
+      } else {
+        return false;
+      }
+    `
+    const tests = [
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '5' },
+      { expectedType: TOKEN_TYPES.LT, expectedLiteral: '<' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '10' },
+      { expectedType: TOKEN_TYPES.GT, expectedLiteral: '>' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '5' },
+      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' },
+      { expectedType: TOKEN_TYPES.IF, expectedLiteral: 'if' },
+      { expectedType: TOKEN_TYPES.LPAREN, expectedLiteral: '(' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '5' },
+      { expectedType: TOKEN_TYPES.LT, expectedLiteral: '<' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '10' },
+      { expectedType: TOKEN_TYPES.RPAREN, expectedLiteral: ')' },
+      { expectedType: TOKEN_TYPES.LBRACE, expectedLiteral: '{' },
+      { expectedType: TOKEN_TYPES.RETURN, expectedLiteral: 'return' },
+      { expectedType: TOKEN_TYPES.TRUE, expectedLiteral: 'true' },
+      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' },
+      { expectedType: TOKEN_TYPES.RBRACE, expectedLiteral: '}' },
+      { expectedType: TOKEN_TYPES.ELSE, expectedLiteral: 'else' },
+      { expectedType: TOKEN_TYPES.LBRACE, expectedLiteral: '{' },
+      { expectedType: TOKEN_TYPES.RETURN, expectedLiteral: 'return' },
+      { expectedType: TOKEN_TYPES.FALSE, expectedLiteral: 'false' },
+      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' },
+      { expectedType: TOKEN_TYPES.RBRACE, expectedLiteral: '}' }
+    ]
+
+    const lexer = Lexer.newLexer(input)
+
+    for (const test of tests) {
+      const token = lexer.nextToken()
+      console.log(token)
+      expect(token.type).toEqual(test.expectedType)
+      expect(token.literal).toEqual(test.expectedLiteral)
+    }
+  })
 })
