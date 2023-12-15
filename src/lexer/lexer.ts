@@ -39,7 +39,13 @@ export class Lexer {
     this.skipWhiteChar()
     switch (this.ch) {
       case TOKEN_TYPES.ASSIGN:
-        token = newToken(TOKEN_TYPES.ASSIGN, this.ch)
+        if (this.peekChar() === '=') {
+          const ch = this.ch
+          this.readChar()
+          token = newToken(TOKEN_TYPES.EQ, `${ch}${this.ch}`)
+        } else {
+          token = newToken(TOKEN_TYPES.ASSIGN, this.ch)
+        }
         break
       case TOKEN_TYPES.COMMA:
         token = newToken(TOKEN_TYPES.COMMA, this.ch)
@@ -69,7 +75,13 @@ export class Lexer {
         token = newToken(TOKEN_TYPES.GT, this.ch)
         break
       case TOKEN_TYPES.BANG:
-        token = newToken(TOKEN_TYPES.BANG, this.ch)
+        if (this.peekChar() === '=') {
+          const ch = this.ch
+          this.readChar()
+          token = newToken(TOKEN_TYPES.NOT_EQ, `${ch}${this.ch}`)
+        } else {
+          token = newToken(TOKEN_TYPES.BANG, this.ch)
+        }
         break
       case TOKEN_TYPES.SLASH:
         token = newToken(TOKEN_TYPES.SLASH, this.ch)
@@ -100,6 +112,14 @@ export class Lexer {
   skipWhiteChar (): void {
     while (isWhiteSpaceCharacter(this.ch)) {
       this.readChar()
+    }
+  }
+
+  peekChar (): string {
+    if (this.readPosition >= this.input.length) {
+      return ''
+    } else {
+      return this.input[this.readPosition]
     }
   }
 

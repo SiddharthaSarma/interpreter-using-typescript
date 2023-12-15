@@ -17,6 +17,9 @@ export const TOKEN_TYPES = {
   LT: '<',
   GT: '>',
 
+  EQ: '==',
+  NOT_EQ: '!=',
+
   // Delimiters
   COMMA: ',',
   SEMICOLON: ';',

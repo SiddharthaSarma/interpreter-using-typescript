@@ -119,7 +119,30 @@ describe('Lexer', () => {
 
     for (const test of tests) {
       const token = lexer.nextToken()
-      console.log(token)
+      expect(token.type).toEqual(test.expectedType)
+      expect(token.literal).toEqual(test.expectedLiteral)
+    }
+  })
+  it('should generate tokens for the gibberish code', () => {
+    const input = `
+    10 == 10;
+    10 != 9;
+    `
+    const tests = [
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '10' },
+      { expectedType: TOKEN_TYPES.EQ, expectedLiteral: '==' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '10' },
+      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '10' },
+      { expectedType: TOKEN_TYPES.NOT_EQ, expectedLiteral: '!=' },
+      { expectedType: TOKEN_TYPES.INT, expectedLiteral: '9' },
+      { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' }
+    ]
+
+    const lexer = Lexer.newLexer(input)
+
+    for (const test of tests) {
+      const token = lexer.nextToken()
       expect(token.type).toEqual(test.expectedType)
       expect(token.literal).toEqual(test.expectedLiteral)
     }
