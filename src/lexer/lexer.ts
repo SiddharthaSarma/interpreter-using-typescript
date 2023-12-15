@@ -1,17 +1,18 @@
-import type { Token, TokenType } from '../token/token'
-import { TOKEN_TYPES } from '../token/token'
+import { isDigit, isLetter, isWhiteSpaceCharacter, newToken } from '../helpers'
+import type { Token } from '../token/token'
+import { TOKEN_TYPES, lookupIdent } from '../token/token'
 
 export class Lexer {
   input: string
   position: number
   readPosition: number
-  ch: string | null
+  ch: string
 
   constructor (input: string) {
     this.input = input
     this.position = 0
     this.readPosition = 0
-    this.ch = null
+    this.ch = ''
   }
 
   public static newLexer (input: string): Lexer {
@@ -22,7 +23,7 @@ export class Lexer {
 
   public readChar (): void {
     if (this.readPosition >= this.input.length) {
-      this.ch = null
+      this.ch = ''
     } else {
       this.ch = this.input[this.readPosition]
     }
@@ -35,46 +36,68 @@ export class Lexer {
       type: TOKEN_TYPES.EOF,
       literal: ''
     }
+    this.skipWhiteChar()
     switch (this.ch) {
       case TOKEN_TYPES.ASSIGN:
-        token = this.newToken(TOKEN_TYPES.ASSIGN, this.ch)
+        token = newToken(TOKEN_TYPES.ASSIGN, this.ch)
         break
       case TOKEN_TYPES.COMMA:
-        token = this.newToken(TOKEN_TYPES.COMMA, this.ch)
+        token = newToken(TOKEN_TYPES.COMMA, this.ch)
         break
       case TOKEN_TYPES.LPAREN:
-        token = this.newToken(TOKEN_TYPES.LPAREN, this.ch)
+        token = newToken(TOKEN_TYPES.LPAREN, this.ch)
         break
       case TOKEN_TYPES.RPAREN:
-        token = this.newToken(TOKEN_TYPES.RPAREN, this.ch)
+        token = newToken(TOKEN_TYPES.RPAREN, this.ch)
         break
       case TOKEN_TYPES.LBRACE:
-        token = this.newToken(TOKEN_TYPES.LBRACE, this.ch)
+        token = newToken(TOKEN_TYPES.LBRACE, this.ch)
         break
       case TOKEN_TYPES.RBRACE:
-        token = this.newToken(TOKEN_TYPES.RBRACE, this.ch)
+        token = newToken(TOKEN_TYPES.RBRACE, this.ch)
         break
       case TOKEN_TYPES.PLUS:
-        token = this.newToken(TOKEN_TYPES.PLUS, this.ch)
+        token = newToken(TOKEN_TYPES.PLUS, this.ch)
         break
       case TOKEN_TYPES.SEMICOLON:
-        token = this.newToken(TOKEN_TYPES.SEMICOLON, this.ch)
+        token = newToken(TOKEN_TYPES.SEMICOLON, this.ch)
         break
-      case TOKEN_TYPES.FUNCTION:
-        token = this.newToken(TOKEN_TYPES.FUNCTION, this.ch)
-        break
-      case TOKEN_TYPES.LET:
-        token = this.newToken(TOKEN_TYPES.LET, this.ch)
-        break
+      default:
+        if (isLetter(this.ch)) {
+          token.literal = this.readIdentifier()
+          token.type = lookupIdent(token.literal)
+          // assign token type here
+          return token
+        }
+        if (isDigit(this.ch)) {
+          token.type = TOKEN_TYPES.INT
+          token.literal = this.readNumber()
+          return token
+        }
     }
     this.readChar()
     return token
   }
 
-  public newToken (tokenType: TokenType, literal: string): Token {
-    return {
-      type: tokenType,
-      literal
+  skipWhiteChar (): void {
+    while (isWhiteSpaceCharacter(this.ch)) {
+      this.readChar()
     }
+  }
+
+  public readIdentifier (): string {
+    const position = this.position
+    while (isLetter(this.ch)) {
+      this.readChar()
+    }
+    return this.input.slice(position, this.position)
+  }
+
+  public readNumber (): string {
+    const position = this.position
+    while (isDigit(this.ch)) {
+      this.readChar()
+    }
+    return this.input.slice(position, this.position)
   }
 }

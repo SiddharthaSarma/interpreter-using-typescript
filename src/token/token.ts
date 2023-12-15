@@ -1,3 +1,5 @@
+import { newToken } from '../helpers'
+
 export const TOKEN_TYPES = {
   ILLEGAL: 'ILLEGAL',
   EOF: 'EOF',
@@ -18,6 +20,19 @@ export const TOKEN_TYPES = {
   FUNCTION: 'FUNCTION',
   LET: 'LET'
 } as const
+
+export const KEYWORDS = {
+  fn: newToken(TOKEN_TYPES.FUNCTION, 'fn'),
+  let: newToken(TOKEN_TYPES.LET, 'let')
+} as const
+
+export const lookupIdent = (ident: string): TokenType => {
+  const token = KEYWORDS[ident as keyof typeof KEYWORDS]
+  if (token) {
+    return token.type
+  }
+  return TOKEN_TYPES.IDENT
+}
 
 export type TokenType = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 
