@@ -1,4 +1,4 @@
-import type { Token, TokenType } from '../token/token'
+import type { Token, TokenType } from '../token'
 
 export const isDigit = (ch: string): boolean => {
   const inputCharCode = ch.charCodeAt(0)

@@ -1,5 +1,5 @@
-import { Lexer } from '../lexer/lexer'
-import { TOKEN_TYPES } from '../token/token'
+import { Lexer } from '../lexer'
+import { TOKEN_TYPES } from '../token'
 
 describe('Lexer', () => {
   it('should generate the correct tokens', () => {

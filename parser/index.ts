@@ -1,6 +1,6 @@
 import type { Program } from '../src/ast'
-import type { Lexer } from '../src/lexer/lexer'
-import type { Token } from '../src/token/token'
+import type { Lexer } from '../src/lexer'
+import type { Token } from '../src/token'
 
 export class Parser {
   private readonly lexer: Lexer

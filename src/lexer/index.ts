@@ -1,6 +1,6 @@
 import { isDigit, isLetter, isWhiteSpaceCharacter, newToken } from '../helpers'
-import type { Token } from '../token/token'
-import { TOKEN_TYPES, lookupIdent } from '../token/token'
+import type { Token } from '../token'
+import { TOKEN_TYPES, lookupIdent } from '../token'
 
 export class Lexer {
   input: string
