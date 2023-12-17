@@ -4,16 +4,16 @@ interface ASTNode {
   tokenLiteral: () => string
 }
 
-interface Statement extends ASTNode {
+export interface Statement extends ASTNode {
   statementNode: () => void
 }
 
-interface Expression extends ASTNode {
+export interface Expression extends ASTNode {
   expressionNode: () => void
 }
 
 export class Program implements ASTNode {
-  private readonly statements: Statement[] = []
+  statements: Statement[] = []
 
   constructor (statements: Statement[]) {
     this.statements = statements
@@ -28,10 +28,10 @@ export class Program implements ASTNode {
 }
 
 export class Identifier implements Expression {
-  private readonly token: Token
-  private readonly value: Expression
+  token: Token
+  value: string
 
-  constructor (token: Token, value: Expression) {
+  constructor (token: Token, value: string) {
     this.token = token
     this.value = value
   }
@@ -46,13 +46,13 @@ export class Identifier implements Expression {
 }
 
 export class LetStatement implements Statement {
-  private readonly token: Token
-  private readonly identifier: Identifier
-  private readonly expression: Expression
+  token: Token
+  name: Identifier
+  expression: Expression
 
   constructor (token: Token, identifier: Identifier, expression: Expression) {
     this.token = token
-    this.identifier = identifier
+    this.name = identifier
     this.expression = expression
   }
 

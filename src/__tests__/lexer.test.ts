@@ -16,7 +16,7 @@ describe('Lexer', () => {
       { expectedType: TOKEN_TYPES.EOF, expectedLiteral: '' }
     ]
 
-    const lexer = Lexer.newLexer(input)
+    const lexer = Lexer.new(input)
     for (const test of tests) {
       const token = lexer.nextToken()
       expect(token.literal).toEqual(test.expectedLiteral)
@@ -71,7 +71,7 @@ describe('Lexer', () => {
       { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' }
     ]
 
-    const lexer = Lexer.newLexer(input)
+    const lexer = Lexer.new(input)
 
     for (const test of tests) {
       const token = lexer.nextToken()
@@ -115,7 +115,7 @@ describe('Lexer', () => {
       { expectedType: TOKEN_TYPES.RBRACE, expectedLiteral: '}' }
     ]
 
-    const lexer = Lexer.newLexer(input)
+    const lexer = Lexer.new(input)
 
     for (const test of tests) {
       const token = lexer.nextToken()
@@ -139,7 +139,7 @@ describe('Lexer', () => {
       { expectedType: TOKEN_TYPES.SEMICOLON, expectedLiteral: ';' }
     ]
 
-    const lexer = Lexer.newLexer(input)
+    const lexer = Lexer.new(input)
 
     for (const test of tests) {
       const token = lexer.nextToken()

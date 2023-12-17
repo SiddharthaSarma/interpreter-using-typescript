@@ -10,7 +10,7 @@ const repl = readline.createInterface({
 
 repl.prompt()
 repl.on('line', (input: string) => {
-  const lexer = Lexer.newLexer(input)
+  const lexer = Lexer.new(input)
   while (true) {
     const token = lexer.nextToken()
     if (token.type === TOKEN_TYPES.EOF) {

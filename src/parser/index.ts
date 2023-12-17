@@ -1,6 +1,6 @@
-import type { Program } from '../src/ast'
-import type { Lexer } from '../src/lexer'
-import type { Token } from '../src/token'
+import type { Program } from '../ast'
+import type { Lexer } from '../lexer'
+import type { Token } from '../token'
 
 export class Parser {
   private readonly lexer: Lexer
@@ -11,7 +11,7 @@ export class Parser {
     this.lexer = lexer
   }
 
-  createParser (lexer: Lexer): Parser {
+  static new (lexer: Lexer): Parser {
     const parser = new Parser(lexer)
     parser.nextToken()
     parser.nextToken()
