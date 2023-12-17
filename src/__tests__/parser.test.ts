@@ -29,8 +29,8 @@ describe('Parser', () => {
 function testLetStatement (stmt: Statement, expectedValue: string): boolean {
   if (stmt.tokenLiteral() !== 'let' ||
     !(stmt instanceof LetStatement) ||
-    stmt.name.tokenLiteral() !== expectedValue ||
-    stmt.name.value !== expectedValue) {
+    stmt.name?.tokenLiteral() !== expectedValue ||
+    stmt.name?.value !== expectedValue) {
     return false
   }
   return true

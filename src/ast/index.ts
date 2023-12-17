@@ -15,8 +15,13 @@ export interface Expression extends ASTNode {
 export class Program implements ASTNode {
   statements: Statement[] = []
 
-  constructor (statements: Statement[]) {
+  private constructor (statements: Statement[]) {
     this.statements = statements
+  }
+
+  static new (): Program {
+    const program = new Program([])
+    return program
   }
 
   tokenLiteral (): string {
@@ -31,9 +36,13 @@ export class Identifier implements Expression {
   token: Token
   value: string
 
-  constructor (token: Token, value: string) {
+  private constructor (token: Token, value: string) {
     this.token = token
     this.value = value
+  }
+
+  static new (token: Token, value: string): Identifier {
+    return new Identifier(token, value)
   }
 
   expressionNode (): void {
@@ -47,13 +56,15 @@ export class Identifier implements Expression {
 
 export class LetStatement implements Statement {
   token: Token
-  name: Identifier
-  expression: Expression
+  name?: Identifier
+  expression?: Expression
 
-  constructor (token: Token, identifier: Identifier, expression: Expression) {
+  private constructor (token: Token) {
     this.token = token
-    this.name = identifier
-    this.expression = expression
+  }
+
+  static new (token: Token): LetStatement {
+    return new LetStatement(token)
   }
 
   statementNode (): void {
