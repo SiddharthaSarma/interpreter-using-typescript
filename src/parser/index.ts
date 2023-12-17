@@ -26,7 +26,7 @@ export class Parser {
 
   parseProgram (): Program {
     const program = Program.new()
-    while (this.currToken.type !== TOKEN_TYPES.EOF) {
+    while (!this.currTokenIs(TOKEN_TYPES.EOF)) {
       const stmt = this.parseStatement()
       if (stmt !== null) {
         program.statements.push(stmt)
