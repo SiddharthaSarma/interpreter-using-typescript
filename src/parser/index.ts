@@ -1,6 +1,6 @@
 import type { Lexer } from '../lexer'
 import { TOKEN_TYPES, type TokenType, type Token } from '../token'
-import { Program, LetStatement, Identifier } from '../ast'
+import { Program, LetStatement, ReturnStatement, Identifier } from '../ast'
 import type { Statement } from '../ast'
 
 export class Parser {
@@ -42,6 +42,8 @@ export class Parser {
     switch (this.currToken.type) {
       case TOKEN_TYPES.LET:
         return this.parseLetStatement()
+      case TOKEN_TYPES.RETURN:
+        return this.parseReturnStatement()
       default:
         return null
     }
@@ -59,6 +61,15 @@ export class Parser {
     if (!this.expectPeek(TOKEN_TYPES.ASSIGN)) {
       return null
     }
+
+    while (!this.currTokenIs(TOKEN_TYPES.SEMICOLON)) {
+      this.nextToken()
+    }
+    return stmt
+  }
+
+  parseReturnStatement (): ReturnStatement {
+    const stmt = ReturnStatement.new(this.currToken)
 
     while (!this.currTokenIs(TOKEN_TYPES.SEMICOLON)) {
       this.nextToken()
