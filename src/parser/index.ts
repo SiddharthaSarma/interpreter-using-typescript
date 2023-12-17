@@ -7,9 +7,11 @@ export class Parser {
   private readonly lexer: Lexer
   private currToken!: Token
   private peekToken!: Token
+  private readonly errors: string[]
 
   private constructor (lexer: Lexer) {
     this.lexer = lexer
+    this.errors = []
   }
 
   static new (lexer: Lexer): Parser {
@@ -69,7 +71,17 @@ export class Parser {
       this.nextToken()
       return true
     }
+    this.peekErrors(t)
     return false
+  }
+
+  peekErrors (t: TokenType): void {
+    const msg = `Expected ${t} but got ${this.peekToken.type} instead`
+    this.errors.push(msg)
+  }
+
+  getErrors (): string[] {
+    return this.errors
   }
 
   currTokenIs (t: TokenType): boolean {

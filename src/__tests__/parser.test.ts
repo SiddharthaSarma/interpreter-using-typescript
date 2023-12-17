@@ -6,12 +6,22 @@ import { LetStatement } from '../ast'
 describe('Parser', () => {
   it('should parse the let statements', () => {
     const input = `let x = 5;
-    let y = 10;
+    let y = 10; 
     let foobar = 25;`
+
+    /* to test the error use the below code
+    let x = 5;
+    let  = 10;
+    let foobar = 25;
+    */
 
     const lexer = Lexer.new(input)
     const parser = Parser.new(lexer)
     const program = parser.parseProgram()
+
+    const errors = parser.getErrors()
+    // console.log(errors)
+    expect(errors.length).toBe(0)
 
     expect(program).toBeDefined()
     expect(program?.statements.length).toBe(3)
