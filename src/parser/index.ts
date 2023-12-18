@@ -1,13 +1,18 @@
 import type { Lexer } from '../lexer'
 import { TOKEN_TYPES, type TokenType, type Token } from '../token'
 import { Program, LetStatement, ReturnStatement, Identifier } from '../ast'
-import type { Statement } from '../ast'
+import type { Expression, Statement } from '../ast'
+
+type PrefixParseFn = () => Expression
+type InfixParseFn = (exp: Expression) => Expression
 
 export class Parser {
   private readonly lexer: Lexer
   private currToken!: Token
   private peekToken!: Token
   private readonly errors: string[]
+  private prefixParseFns = new Map<TokenType, PrefixParseFn>()
+  private infixParseFns = new Map<TokenType, InfixParseFn>()
 
   private constructor (lexer: Lexer) {
     this.lexer = lexer
@@ -101,5 +106,13 @@ export class Parser {
 
   peekTokenIs (t: TokenType): boolean {
     return this.peekToken.type === t
+  }
+
+  registerPrefix (tokenType: TokenType, fn: PrefixParseFn): void {
+    this.prefixParseFns.set(tokenType, fn)
+  }
+
+  registerInfix (tokenType: TokenType, fn: InfixParseFn): void {
+    this.infixParseFns.set(tokenType, fn)
   }
 }
