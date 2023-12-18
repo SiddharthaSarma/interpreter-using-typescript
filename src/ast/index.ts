@@ -5,6 +5,7 @@ export { Program } from './program'
 
 export interface ASTNode {
   tokenLiteral: () => string
+  string: () => string
 }
 
 export interface Statement extends ASTNode {

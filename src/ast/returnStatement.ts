@@ -3,7 +3,7 @@ import type { Token } from '../token'
 
 export class ReturnStatement implements Statement {
   token: Token
-  value?: Expression
+  returnValue?: Expression
 
   private constructor (token: Token) {
     this.token = token
@@ -19,5 +19,16 @@ export class ReturnStatement implements Statement {
 
   tokenLiteral (): string {
     return this.token.literal
+  }
+
+  string (): string {
+    let out = ''
+    out += this.tokenLiteral() + ' '
+
+    if (this.returnValue !== undefined) {
+      out += this.returnValue.string()
+    }
+    out += ';'
+    return out
   }
 }

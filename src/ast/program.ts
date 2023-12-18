@@ -18,4 +18,12 @@ export class Program implements ASTNode {
     }
     return ''
   }
+
+  string (): string {
+    let out = ''
+    for (const stmt of this.statements) {
+      out += stmt.string()
+    }
+    return out
+  }
 }

@@ -19,4 +19,10 @@ export class ExpressionStatement implements Statement {
 
   statementNode (): void {}
 
+  string (): string {
+    if (this.expression !== undefined && this.expression !== null) {
+      return this.expression.string()
+    }
+    return ''
+  }
 }
