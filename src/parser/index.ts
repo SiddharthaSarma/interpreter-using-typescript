@@ -3,6 +3,7 @@ import { TOKEN_TYPES, type TokenType, type Token } from '../token'
 import { Program, LetStatement, ReturnStatement, Identifier } from '../ast'
 import type { Expression, Statement } from '../ast'
 import { ExpressionStatement } from '../ast/expressionStatement'
+import { IntegerLiteral } from '../ast/integerStatement'
 
 type PrefixParseFn = () => Expression
 type InfixParseFn = (exp: Expression) => Expression
@@ -36,6 +37,7 @@ export class Parser {
     parser.nextToken()
 
     parser.registerPrefix(TOKEN_TYPES.IDENT, parser.parseIdentifier)
+    parser.registerPrefix(TOKEN_TYPES.INT, parser.parseIntegerLiteral)
     return parser
   }
 
@@ -86,6 +88,17 @@ export class Parser {
     if (this.peekTokenIs(TOKEN_TYPES.SEMICOLON)) {
       this.nextToken()
     }
+    return stmt
+  }
+
+  parseIntegerLiteral = (): IntegerLiteral => {
+    const stmt = IntegerLiteral.new(this.currToken)
+    const value = parseInt(this.currToken.literal, 10)
+    if (isNaN(value)) {
+      const msg = `cannot parse ${this.currToken.literal} as integer`
+      this.errors.push(msg)
+    }
+    stmt.value = value
     return stmt
   }
 

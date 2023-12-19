@@ -3,6 +3,7 @@ import { Lexer } from '../lexer'
 import type { Statement } from '../ast'
 import { Identifier, LetStatement, ReturnStatement } from '../ast'
 import { ExpressionStatement } from '../ast/expressionStatement'
+import { IntegerLiteral } from '../ast/integerStatement'
 
 describe('Parser', () => {
   it('should parse the let statements', () => {
@@ -77,6 +78,25 @@ describe('Parser', () => {
 
     expect((ident as Identifier).value).toBe('foobar')
     expect((ident as Identifier).tokenLiteral()).toBe('foobar')
+  })
+
+  it('should parse the integer expression', () => {
+    const input = '5;'
+
+    const lexer = Lexer.new(input)
+    const parser = Parser.new(lexer)
+    const program = parser.parseProgram()
+
+    const errors = parser.getErrors()
+    expect(errors.length).toBe(0)
+
+    expect(program.statements.length).toBe(1)
+
+    const stmt = (program.statements[0] as ExpressionStatement)?.expression
+    expect(stmt instanceof IntegerLiteral).toBeTruthy()
+
+    expect((stmt as IntegerLiteral).value).toBe(5)
+    expect((stmt as IntegerLiteral).tokenLiteral()).toBe('5')
   })
 })
 
