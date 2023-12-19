@@ -2,17 +2,28 @@ import type { Lexer } from '../lexer'
 import { TOKEN_TYPES, type TokenType, type Token } from '../token'
 import { Program, LetStatement, ReturnStatement, Identifier } from '../ast'
 import type { Expression, Statement } from '../ast'
+import { ExpressionStatement } from '../ast/expressionStatement'
 
 type PrefixParseFn = () => Expression
 type InfixParseFn = (exp: Expression) => Expression
+
+enum PrecedenceTable {
+  LOWEST = 1,
+  EQUALS,
+  LESSGREATER,
+  SUM,
+  PRODUCT,
+  PREFIX,
+  CALL
+}
 
 export class Parser {
   private readonly lexer: Lexer
   private currToken!: Token
   private peekToken!: Token
   private readonly errors: string[]
-  private prefixParseFns = new Map<TokenType, PrefixParseFn>()
-  private infixParseFns = new Map<TokenType, InfixParseFn>()
+  private readonly prefixParseFns = new Map<TokenType, PrefixParseFn>()
+  private readonly infixParseFns = new Map<TokenType, InfixParseFn>()
 
   private constructor (lexer: Lexer) {
     this.lexer = lexer
@@ -23,12 +34,18 @@ export class Parser {
     const parser = new Parser(lexer)
     parser.nextToken()
     parser.nextToken()
+
+    parser.registerPrefix(TOKEN_TYPES.IDENT, parser.parseIdentifier)
     return parser
   }
 
   nextToken (): void {
     this.currToken = this.peekToken
     this.peekToken = this.lexer.nextToken()
+  }
+
+  parseIdentifier = (): Expression => {
+    return Identifier.new(this.currToken, this.currToken.literal)
   }
 
   parseProgram (): Program {
@@ -50,8 +67,26 @@ export class Parser {
       case TOKEN_TYPES.RETURN:
         return this.parseReturnStatement()
       default:
-        return null
+        return this.parseExpressionStatement()
     }
+  }
+
+  parseExpression (precedence: PrecedenceTable): Expression | undefined {
+    const prefix = this.prefixParseFns.get(this.currToken.type)
+    if (prefix === undefined) {
+      return undefined
+    }
+    return prefix()
+  }
+
+  parseExpressionStatement (): ExpressionStatement {
+    const stmt = ExpressionStatement.new(this.currToken)
+    stmt.expression = this.parseExpression(PrecedenceTable.LOWEST)
+
+    if (this.peekTokenIs(TOKEN_TYPES.SEMICOLON)) {
+      this.nextToken()
+    }
+    return stmt
   }
 
   parseLetStatement (): LetStatement | null {

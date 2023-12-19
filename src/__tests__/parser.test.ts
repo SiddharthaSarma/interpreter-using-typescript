@@ -1,7 +1,8 @@
 import { Parser } from '../parser'
 import { Lexer } from '../lexer'
 import type { Statement } from '../ast'
-import { LetStatement, ReturnStatement } from '../ast'
+import { Identifier, LetStatement, ReturnStatement } from '../ast'
+import { ExpressionStatement } from '../ast/expressionStatement'
 
 describe('Parser', () => {
   it('should parse the let statements', () => {
@@ -55,6 +56,27 @@ describe('Parser', () => {
       expect(stmt instanceof ReturnStatement).toBeTruthy()
       expect(stmt.tokenLiteral()).toBe('return')
     }
+  })
+
+  it('should parse the expression statement', () => {
+    const input = 'foobar;'
+
+    const lexer = Lexer.new(input)
+    const parser = Parser.new(lexer)
+    const program = parser.parseProgram()
+
+    const errors = parser.getErrors()
+    expect(errors.length).toBe(0)
+
+    expect(program.statements.length).toBe(1)
+    const stmt = program.statements[0]
+    expect(stmt instanceof ExpressionStatement).toBeTruthy()
+
+    const ident = (stmt as ExpressionStatement).expression
+    expect(ident instanceof Identifier).toBeTruthy()
+
+    expect((ident as Identifier).value).toBe('foobar')
+    expect((ident as Identifier).tokenLiteral()).toBe('foobar')
   })
 })
 
